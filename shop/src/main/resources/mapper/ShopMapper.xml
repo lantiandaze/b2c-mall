@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.b2cmall.shop.dao.ShopMapper">
+    <select id="findByName" resultType="com.b2cmall.shop.dao.po.ShopPO">
+        SELECT id, shop_name AS shopName, admin_account AS adminAccount, admin_password AS adminPassword
+        FROM tb_shop WHERE shop_name=#{name}
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tb_shop(shop_name,admin_account,admin_password) VALUES(#{shopName},#{adminAccount},#{adminPassword})
+    </insert>
+</mapper>

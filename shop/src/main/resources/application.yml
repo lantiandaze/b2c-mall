@@ -1,0 +1,36 @@
+server:
+  port: ${SHOP_PORT:8081}
+
+spring:
+  config:
+    import:
+      - optional:nacos:shop-service.yml
+  application:
+    name: shop-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+        namespace: ${NACOS_NAMESPACE:b2c}
+      config:
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+        namespace: ${NACOS_NAMESPACE:b2c}
+        file-extension: yml
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    url: ${SHOP_DB_URL:jdbc:sqlite:database/mall_shop.db}
+    hikari:
+      maximum-pool-size: 1
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 2000
+        readTimeout: 3000
+
+# Local classroom shared key; override together for other environments.
+internal:
+  token: ${INTERNAL_SERVICE_TOKEN}
