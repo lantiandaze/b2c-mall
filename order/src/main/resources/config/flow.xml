@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow>
+    <chain name="payChain">
+        THEN(priceCheck, stockCheck, SWITCH(payswitch).to(alipay, wechat), orderStatus);
+    </chain>
+</flow>
+

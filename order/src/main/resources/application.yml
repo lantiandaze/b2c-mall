@@ -1,0 +1,47 @@
+server:
+  port: ${ORDER_PORT:8083}
+spring:
+  application:
+    name: order-service
+  config:
+    import:
+      - optional:nacos:order-service.yml
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+        namespace: ${NACOS_NAMESPACE:b2c}
+      config:
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+        namespace: ${NACOS_NAMESPACE:b2c}
+  jackson:
+    deserialization:
+      accept-float-as-int: false
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    url: ${ORDER_DB_URL:jdbc:sqlite:database/mall_order.db}
+    hikari:
+      maximum-pool-size: 1
+      connection-init-sql: PRAGMA foreign_keys=ON
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*.xml
+feign:
+  client:
+    config:
+      employee-service:
+        connectTimeout: 3000
+        readTimeout: 5000
+      product-service:
+        connectTimeout: 3000
+        readTimeout: 5000
+
+
+# Only simulated payments are supported in this classroom phase.
+payment:
+  mock-enabled: ${PAYMENT_MOCK_ENABLED:true}
+  mock-callback-key: ${MOCK_CALLBACK_KEY}
+
+liteflow:
+  rule-source: config/flow.xml
