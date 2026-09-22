@@ -1,0 +1,45 @@
+server:
+  port: ${EMPLOYEE_PORT:8084}
+spring:
+  jackson:
+    deserialization:
+      accept-float-as-int: false
+  application:
+    name: employee-service
+  config:
+    import:
+      - optional:nacos:employee-service.yml
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+        namespace: ${NACOS_NAMESPACE:b2c}
+      config:
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+        namespace: ${NACOS_NAMESPACE:b2c}
+  redis:
+    host: ${REDIS_HOST:127.0.0.1}
+    port: ${REDIS_PORT:6379}
+    database: 0
+    timeout: 3s
+    connect-timeout: 3s
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    url: ${EMPLOYEE_DB_URL:jdbc:sqlite:database/mall_employee.db}
+    hikari:
+      maximum-pool-size: 1
+      connection-init-sql: PRAGMA foreign_keys=ON
+
+# Local classroom shared key; override together for other environments.
+internal:
+  token: ${INTERNAL_SERVICE_TOKEN}
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+# Classroom JWT signing key; override with JWT_TOKEN_KEY when deploying elsewhere.
+jwt:
+  token:
+    key: ${JWT_TOKEN_KEY}
+    ttl-seconds: ${JWT_TTL_SECONDS:7200}
+    redis-prefix: ${TOKEN_REDIS_PREFIX:b2c:token:}
