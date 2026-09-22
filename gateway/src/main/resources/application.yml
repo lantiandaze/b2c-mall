@@ -1,0 +1,50 @@
+server:
+  port: ${GATEWAY_PORT:8080}
+
+spring:
+  config:
+    import:
+      - optional:nacos:gateway-service.yml
+  application:
+    name: gateway-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+        namespace: ${NACOS_NAMESPACE:b2c}
+      config:
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+        namespace: ${NACOS_NAMESPACE:b2c}
+        file-extension: yml
+    gateway:
+      routes:
+        - id: shop-api
+          uri: ${SHOP_SERVICE_URL:lb://shop-service}
+          predicates:
+            - Path=/api/shop/**
+          filters:
+            - StripPrefix=1
+        - id: employee-api
+          uri: ${EMPLOYEE_SERVICE_URL:lb://employee-service}
+          predicates:
+            - Path=/api/employee/**
+          filters:
+            - StripPrefix=1
+
+        - id: product-api
+          uri: ${PRODUCT_SERVICE_URL:lb://product-service}
+          predicates:
+            - Path=/api/product/**
+          filters:
+            - StripPrefix=1
+
+        - id: order-api
+          uri: ${ORDER_SERVICE_URL:lb://order-service}
+          predicates:
+            - Path=/api/order/**
+          filters:
+            - StripPrefix=1
+
+# Shared with Employee to authenticate forwarded login IP.
+internal:
+  token: ${INTERNAL_SERVICE_TOKEN}
